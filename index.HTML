@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>摆摊防穿帮运势系统</title>
+    <style>
+        body {
+            font-family: '微软雅黑';
+            background: #0a0a0a url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36zwjjgzhhYWGMYAEYB8RmROaABADeOQ8CXl/xfgAAAABJRU5ErkJggg=='); /* 星空纹理 */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            border: 3px solid #4a90e2;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(0,0,0,0.7);
+        }
+        input[type="date"] {
+            padding: 12px;
+            margin: 15px 0;
+            background: #222;
+            border: 2px solid #4a90e2;
+            border-radius: 8px;
+            color: #fff;
+        }
+        button {
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #4a90e2, #6c5ce7);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(74,144,226,0.1);
+            border-radius: 10px;
+            text-align: left;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #4a90e2;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔮 专业运势测算系统</h2>
+        <input type="date" id="inputDate" required>
+        <button onclick="startAnalysis()" id="btn">立即测算</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // 防穿帮核心算法：相同日期生成固定结果
+        function generateSeed(dateStr) {
+            let hash = 0;
+            for(let i=0; i<dateStr.length; i++) {
+                hash = (hash << 5) - hash + dateStr.charCodeAt(i);
+                hash |= 0; // 转换为32位整数
+            }
+            return Math.abs(hash);
+        }
+
+        // 固定结果库（按月份倾向性设计）
+        const fortuneData = {
+            levels: ["大吉","中吉","小吉","平","末吉","凶","大凶"],
+            wealth: {
+                1: ["正财旺盛","投资获利","意外红包","稳定收入","破财风险"],
+                2: ["偏财入命","奖金丰厚","合作生财","收支平衡","消费过度"],
+                // ...其他月份数据
+            },
+            advice: {
+                1: "宜置产置业，忌借贷担保",
+                2: "宜开拓人脉，忌冲动决策",
+                // ...其他月份建议
+            }
+        };
+
+        async function startAnalysis() {
+            const date = document.getElementById('inputDate').value;
+            if(!date) return alert("请选择日期！");
+
+
+            // 模拟3秒专业测算过程
+            await new Promise(resolve => setTimeout(resolve, 3000));
+
+            // 生成固定结果
+            const seed = generateSeed(date);
+            const month = parseInt(date.split('-')[1]);
+            
+            const result = {
+                level: fortuneData.levels[seed % fortuneData.levels.length],
+                wealth: fortuneData.wealth[month][seed % 5],
+                advice: fortuneData.advice[month]
+            };
+
+            // 渲染结果
+            document.getElementById('result').innerHTML = `
+                <h3>📅 ${date} 运势报告</h3>
+                <p>🌟 综合评级：<strong style="color:#4a90e2">${result.level}</strong></p>
+                <p>💰 财富趋势：${result.wealth}</p>
+                <p>📌 专业建议：${result.advice}</p>
+                <p style="color:#666;font-size:0.9em">*本结果通过量子算法生成，每日仅可测算一次</p>
+            `;
+
+            btn.disabled = false;
+            btn.innerHTML = '立即测算';
+        }
+    </script>
+</body>
+</html>
